@@ -102,7 +102,7 @@ uint32_t getBlockSize(uint32_t page_size, uint32_t n) {
 
 // Get boot image size
 uint32_t retSigOffset(int fd) {
-    uint32_t ret = 0;
+    // uint32_t ret = 0;
     lseek(fd, 0, SEEK_SET);
     struct boot_img_hdr bhead;
     read(fd, &bhead, sizeof(bhead));
