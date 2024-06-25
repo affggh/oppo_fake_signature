@@ -7,11 +7,13 @@ TARGET 		= aarch64-linux-android
 
 CC			= $(PREFIX)$(TARGET)$(ANDROID_API)-clang
 
-META_FILES	= packaging/META-INF
+META_FILES_DIR		= packaging/META-INF
 
-OUT_DIR		= out
-OUT_SIGFAKE	= ${OUT_DIR}/sigfake
-OUT_FLASHABLE	= ${OUT_DIR}/sigfake.zip
+OUT_DIR			= out
+OUT_SIGFAKE_PKG_DIR	= ${OUT_DIR}/pkg
+OUT_FLASHABLE		= ${OUT_DIR}/sigfake.zip
+OUT_SIGFAKE		= ${OUT_DIR}/sigfake
+OUT_SIGFAKE_HOST	= ${OUT_DIR}/sigfake_host
 
 build:
 	mkdir $(OUT_DIR)
@@ -19,10 +21,12 @@ ifeq ($(ANDROID_NDK_HOME),)
 	$(error ANDROID_NDK_HOME is undefined)
 endif
 	$(CC) sigfake.c -o ${OUT_SIGFAKE}
+	clang sigfake.c -o ${OUT_SIGFAKE_HOST}
 
 package:
-	cp -r ${META_FILES} ${OUT_DIR}
-	zip -rj ${OUT_FLASHABLE} ${OUT_DIR}
+	cp -r ${META_FILES_DIR} ${OUT_SIGFAKE_PKG_DIR}
+	cp -r ${OUT_SIGFAKE} ${OUT_SIGFAKE_PKG_DIR}
+	zip -rj ${OUT_FLASHABLE} ${OUT_SIGFAKE_PKG_DIR}
 
 clean:
 	rm -rf $(OUT_DIR)
