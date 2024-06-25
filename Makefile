@@ -15,6 +15,9 @@ OUT_FLASHABLE	= ${OUT_DIR}/sigfake.zip
 
 build:
 	mkdir $(OUT_DIR)
+ifeq ($(ANDROID_NDK_HOME),)
+	$(error ANDROID_NDK_HOME is undefined)
+endif
 	$(CC) sigfake.c -o ${OUT_SIGFAKE}
 
 package:
