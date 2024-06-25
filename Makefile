@@ -19,16 +19,20 @@ OUT_SIGFAKE_HOST	= ${OUT_DIR}/sigfake_host
 
 build:
 	mkdir $(OUT_DIR)
+ifneq ($(BUILD_HOST_SIGFAKE_ONLY), true)
 ifeq ($(ANDROID_NDK_HOME),)
 	$(error ANDROID_NDK_HOME is undefined)
 endif
 	$(CC) sigfake.c -o ${OUT_SIGFAKE}
+endif
 	clang sigfake.c -o ${OUT_SIGFAKE_HOST}
 
 package:
+ifneq ($(BUILD_HOST_SIGFAKE_ONLY), true)
 	cp -r ${META_FILES_DIR} ${OUT_SIGFAKE_PKG_DIR}
 	cp -r ${OUT_SIGFAKE} ${OUT_SIGFAKE_PKG_DIR}
 	cd ${OUT_SIGFAKE_PKG_DIR} && zip -r ${OUT_FLASHABLE} .
+endif
 
 clean:
 	rm -rf $(OUT_DIR)
