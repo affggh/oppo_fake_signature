@@ -20,20 +20,21 @@ rm -rf META-INF
 
 ui_print "Setting up environment"
 SIGFAKE="${TMP}/sigfake"
+BOOTIMG="${TMP}/boot.img"
 chmod +x "${SIGFAKE}"
 
 ui_print "Dumping original boot image"
-dd if=/dev/block/bootdevice/by-name/boot of=${TMP}/boot.img
+dd if=/dev/block/bootdevice/by-name/boot of=${BOOTIMG}
 
 ui_print "Patching boot image"
-$SIGFAKE ${TMP}/boot.img
+$SIGFAKE ${BOOTIMG}
 
 ui_print "Flashing patched boot image"
-dd if=${TMP}/boot.img of=/dev/block/bootdevice/by-name/boot
+dd if=${BOOTIMG} of=/dev/block/bootdevice/by-name/boot
 
 ui_print "Cleaning up files"
-rm $TMP/boot.img
-rm $TMP/sigfake
+rm "${BOOTIMG}"
+rm "${SIGFAKE}"
 
 ui_print "Done!"
 exit 0
