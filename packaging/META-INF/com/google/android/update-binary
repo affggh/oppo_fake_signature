@@ -1,0 +1,40 @@
+#!/sbin/sh
+
+OUTFD="/proc/self/fd/$2"
+ZIP=$3
+
+ui_print() {
+  echo "ui_print $1" > "$OUTFD";
+  echo "ui_print" > "$OUTFD";
+}
+
+ui_print "*******************"
+ui_print "oppo_fake_signature"
+ui_print "*******************"
+
+ui_print "Extracting files"
+TMP=/tmp
+cd "$TMP"
+unzip -o "$ZIP"
+rm -rf META-INF
+
+ui_print "Setting up environment"
+SIGFAKE="${TMP}/sigfake"
+BOOTIMG="${TMP}/boot.img"
+chmod +x "${SIGFAKE}"
+
+ui_print "Dumping original boot image"
+dd if=/dev/block/bootdevice/by-name/boot of=${BOOTIMG}
+
+ui_print "Patching boot image"
+$SIGFAKE ${BOOTIMG}
+
+ui_print "Flashing patched boot image"
+dd if=${BOOTIMG} of=/dev/block/bootdevice/by-name/boot
+
+ui_print "Cleaning up files"
+rm "${BOOTIMG}"
+rm "${SIGFAKE}"
+
+ui_print "Done!"
+exit 0

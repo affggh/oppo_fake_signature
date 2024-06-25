@@ -1,11 +1,8 @@
 #include <stdio.h>
-#include <stdlib.h>
+#include <stdint.h>
 #include <unistd.h>
 #include <fcntl.h>
 #include <sys/types.h>
-#ifdef __MINGW32__
-#include <stdint.h>
-#endif
 
 #ifndef O_BINARY
 #define O_BINARY 0
