@@ -7,11 +7,21 @@ TARGET 		= aarch64-linux-android
 
 CC			= $(PREFIX)$(TARGET)$(ANDROID_API)-clang
 
+META_FILES	= packaging/META-INF
+
+OUT_DIR		= out
+OUT_SIGFAKE	= ${OUT_DIR}/sigfake
+OUT_FLASHABLE	= ${OUT_DIR}/sigfake.zip
+
 build:
-	$(CC) sigfake.c -o sigfake
+	mkdir $(OUT_DIR)
+	$(CC) sigfake.c -o ${OUT_SIGFAKE}
+
+package:
+	cp -r ${META_FILES} ${OUT_DIR}
+	zip -rj ${OUT_FLASHABLE} ${OUT_DIR}
 
 clean:
-	rm -f sigfake
+	rm -rf $(OUT_DIR)
 
-all:
-	clean build
+all: clean build package
